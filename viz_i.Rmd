@@ -11,6 +11,8 @@ library(ggridges)
 # Load the weather data
 
 ```{r}
+#rnoaa package allow to access public data online that is aggregated by the noaa.com。 就是直接可以从网站获得数据的办法
+#USWOOO94728这些都是weather station
 weather_df = 
   rnoaa::meteo_pull_monitors(
     c("USW00094728", "USC00519397", "USS0023B17S"),
@@ -30,3 +32,51 @@ weather_df =
 weather_df
 ```
 
+## Scatterplots
+
+create my first scatterplot ever
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+New approach, same plot.
+
+```{r}
+#这个办法更好，因为可以再dataset跟ggplot之间加mutate function之类的，不需要单独再做一个新的dataframe
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+save and edit a plot object
+
+```{r}
+weather_plot =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax))
+
+weather_plot + geom_point()
+  
+```
+
+## Advanced scatterplot...
+
+Start with the same one and make it fancy!
+```{r}
+#geom_smooth add smooth trajectory through the data 
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+What about the `aes` placement
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name)) +
+  geom_smooth(se = FALSE)  
+```
