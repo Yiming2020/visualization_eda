@@ -6,6 +6,7 @@ output: html_document
 ```{r}
 library(tidyverse)
 library(ggridges)
+library(hexbin)
 ```
 
 # Load the weather data
@@ -93,6 +94,45 @@ weather_df %>%
   geom_point(alpha = 0.5, size = .3) + 
   geom_smooth(se = FALSE) +
   facet_grid(. ~name)
+```
+
+Let's combine some elements and try a new plot
+
+```{r}
+#size根据preticipates 变化
+weather_df %>% 
+  ggplot(aes(x = date, y =tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = .5) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~name)
+```
+
+
+## Some small notes
+
+How many geoms have to exit?
+
+You can hace whatever geoms you want.
+```{r}
+#可以直接创造smooth cruve without scatterplot
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_smooth(se = FALSE)
+```
+
+You can use a neat geom!
+
+```{r}
+#把一样位置的点以count的方式记录，根据count进行颜色渐变
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex()
+
+#做2D density 图，有点像地图等高线的那个
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_density_2d()+
+  geom_point(alpha = .3)
 ```
 
 
