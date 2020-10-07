@@ -161,3 +161,12 @@ weather_df %>%
   facet_grid(. ~ name)
 ```
 
+Let's try a new geometry!
+
+```{r}
+#geom_density: is a histogram that's been smoothed out around the edges, 这个可以帮助我们loss一些不必要的data，如果我们想保留更多可以用adjust
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .3, adjust = .5)
+```
+
