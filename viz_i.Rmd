@@ -65,7 +65,7 @@ weather_plot + geom_point()
 
 Start with the same one and make it fancy!
 ```{r}
-#geom_smooth add smooth trajectory through the data 
+#geom_smooth add smooth trajectories through the data。 且出现的是多条curve，curve数量取决于name的数量（仅此题）
 weather_df %>% 
   ggplot(aes(x = tmin, y = tmax, color = name)) +
   geom_point() + 
@@ -75,8 +75,24 @@ weather_df %>%
 What about the `aes` placement
 
 ```{r}
+#这个办法让scatterplot跟前一个图没啥区别。但是color only applies to the scatterplot 导致smooth curve仅出现一条，不会因为name区分而出现多个
 weather_df %>% 
   ggplot(aes(x = tmin, y = tmax)) +
   geom_point(aes(color = name)) +
   geom_smooth(se = FALSE)  
 ```
+
+Let's facet some things
+
+```{r}
+#facet_grid(): create multi panel plots, function里面填写what define on rows，columns，若没有就用“."代替，若有就用“~XXXX”代替。 facet_grid 括号里面按顺序第一个works on rows， 第二个works on columns
+#geom_point(alpha = 0.5) 代表ggplot里面的点需要50%transparent,还可以让alpha = 某个variable（例如alpha = tmin,就能随着tmin变化出渐变色）
+#同时通过size = .3让point 小一些
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5, size = .3) + 
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~name)
+```
+
+
