@@ -135,4 +135,29 @@ weather_df %>%
   geom_point(alpha = .3)
 ```
 
+## Univariate plots, means one variable at a time
+
+Histograms are really great.
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin)) +
+  geom_histogram()
+```
+
+Can we add color...
+
+```{r}
+#position ="dodge" 代表不想要不同name的数据竖着堆叠，而是想要他们一左一右挨着
+#fill 在这里跟scatterplot里面的color意义差不多，但是在histogram里面用fill
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram(position ="dodge") 
+
+
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram()+
+  facet_grid(. ~ name)
+```
 
