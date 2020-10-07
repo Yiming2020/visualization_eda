@@ -178,5 +178,23 @@ weather_df %>%
   geom_boxplot()
 ```
 
+Trendy plots
 
+```{r}
+#violin plot 有点像boxplot跟density plot的结合体
+#利用stat_summary function 可以在图上临时加statistical data
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin, fill = name)) +
+  geom_violin(alpha = .5) +
+  stat_summary(fun = "median")
+```
+
+Ridge plots -- the most popular plot of 2017
+
+```{r}
+#ridge plots 是density plot的一种，不是像density plot把一个categorical predictor的不同variable的几个density plot叠加在一起，而是分开来看。
+weather_df %>% 
+  ggplot(aes(x = tmin, y = name)) +
+  geom_density_ridges()
+```
 
