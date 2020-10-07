@@ -198,3 +198,18 @@ weather_df %>%
   geom_density_ridges()
 ```
 
+
+## Save and Embed
+
+Let's sabe a scatterplot.
+```{r}
+#ggsave如果不该设定的话默认save到同一个文件夹里
+#下面我设定存在此文件夹下面的一个result folder里面
+weather_plot1 =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5)
+
+ggsave("./result/weather_plot1.pdf", weather_plot1, width = 8, height = 5)
+```
+
