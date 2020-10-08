@@ -52,3 +52,60 @@ weather_df %>%
   )
 ```
 
+# Scales
+
+Start with the same plot; x and y scales
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    tittle = "Tempperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; tempereature in 2017."
+  ) +
+  scale_x_continuous(
+    breaks = c(-15, 0 ,15),
+    labels = c("-15 C", "0", "15")
+    )+ 
+  scale_y_continuous(
+    position = "right",
+    trans = "log"
+  )
+```
+
+Look at color scales
+
+```{r}
+#通过使用scale_color_hue function 可以改变variable color范围，可以改变categorical name by using argument "name" in scale_color_hue function(name = "xxxx")
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    tittle = "Tempperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; tempereature in 2017."
+  ) +
+  scale_color_hue(
+    name = "Location",
+    h = c(100, 300))
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    tittle = "Tempperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; tempereature in 2017."
+  ) +
+  viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE)
+```
+
