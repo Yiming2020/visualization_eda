@@ -223,7 +223,7 @@ weather_df %>%
 What happens when you want multipanel plots but can't facet..?
 
 ```{r}
-##再不能用facet的情况下，混合multipanel到一个plot的方法
+##再不能用facet的情况下，混合multipanel到一个页面的方法
 tmax_tmin_p = 
   weather_df %>% 
   ggplot(aes(x = tmin, y =tmax, color = name)) +
@@ -249,4 +249,46 @@ tmax_tmin_p + prcp_dens_p + tmax_date_p
 tmax_tmin_p /(prcp_dens_p + tmax_date_p)
 
 ```
+
+## Data manipulation
+
+Control your factors.
+
+```{r}
+#因为r的逻辑是把categorical varianles转换成factor123，然后在作图的时候又识别123分别是什么以categorical name显示
+#所以想改变同一个图的panel顺序，比如把xxx放在第一个，那就是要进行data manipulation，而不是在ggplot进行操作
+#下面这个步骤就是用fct_relevel把waikiki panel提到第一个
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name= forcats::fct_relevel(name, c("Waikiki_HA"))
+  ) %>% 
+  ggplot(aes(x = name,y = tmax, fill = name)) +
+  geom_violin(alpha = .5)
+```
+
+What is I wanted densities for tmin and tmax simultaneously?(就是tmin 和tmax density plot overlaid)
+
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperature"
+  ) %>% 
+  ggplot(aes(x = temperature, fill = observation)) +
+  geom_density(alpha = .5) 
+
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperature"
+  ) %>% 
+  ggplot(aes(x = temperature, fill = observation)) +
+  geom_density(alpha = .5) + 
+  facet_grid(. ~ name)
+```
+
 
