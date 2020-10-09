@@ -135,3 +135,57 @@ weather_df %>%
   janitor::tabyl(name, cold)
 ```
 
+## General summaries
+
+You can do lots of summaries.
+
+```{r}
+#na.rm = TRUE :remove NA
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  )
+```
+
+This is a dataframe! So we can make a plot
+
+```{r}
+#na.rm = TRUE :remove NA
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    mean_prcp = mean(prcp, na.rm = TRUE),
+    median_tmin = median(tmin, na.rm = TRUE)
+  ) %>% 
+  ggplot(aes(x = month, y = mean_tmax, color = name)) +
+  geom_line()
+```
+
+Suppose you want to sumarize many columns.
+
+```{r}
+#一次性summarize多个variables（column的数据
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(across(prcp:tmin, mean))
+```
+
+Reminder sometimes your results are easier to read in another format.
+
+```{r}
+#   knitr::kable(digits = x): format something is easier to read if you have r markdown doc,digits = x是保留几位小数。 总的来说就是把dataframe变成容易读的表格
+
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(mean_tmax = mean(tmax)) %>% 
+  pivot_wider(
+    names_from = name,
+    values_from = mean_tmax
+  ) %>% 
+  knitr::kable(digits = 1)
+```
+
