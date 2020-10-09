@@ -103,3 +103,35 @@ weather_df %>%
     n_days = n_distinct(date))
 ```
 
+## A digression on 2X2 tables
+
+```{r}
+#case_when(条件 ~ output) function means given this condition, then output.
+#TRUE ~ "" means :if I miss something, just put as missing value
+weather_df %>% 
+  filter(name !="Waikiki_HA") %>% 
+  mutate(
+    cold = case_when(
+      tmax < 5 ~ "cold",
+      tmax >= 5 ~ "not_cold",
+      TRUE ~ ""
+    )
+  ) %>% 
+  group_by(name, cold) %>% 
+  summarize(count = n())
+```
+
+```{r}
+#janitor::tabyl()可以得到跟上面一样的结果，只是这个是2X2的table，会把括号里variable里面不同项（labels）拆开成不同的列
+weather_df %>% 
+  filter(name !="Waikiki_HA") %>% 
+  mutate(
+    cold = case_when(
+      tmax < 5 ~ "cold",
+      tmax >= 5 ~ "not_cold",
+      TRUE ~ ""
+    )
+  ) %>% 
+  janitor::tabyl(name, cold)
+```
+
