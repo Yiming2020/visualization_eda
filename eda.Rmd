@@ -62,3 +62,44 @@ weather_df %>%
   ungroup(month)
 ```
 
+## counting things
+
+count month/name observations
+
+```{r}
+weather_df %>% 
+  group_by(month) %>% 
+  summarize(n_obs =n())
+
+weather_df %>% 
+  group_by(name, month) %>% 
+  summarize(n_obs =n())
+```
+
+we can use `count()` as well
+
+```{r}
+#name = "n_obs" means 给counts命名为n_obs
+weather_df %>% 
+  count(month, name = "n_obs")
+```
+
+***Never*** use base R's table function
+不要用table function方法进行counting，如下
+```{r}
+weather_df %>% 
+  pull(month) %>% 
+  table()
+```
+
+other helpful counters
+
+```{r}
+#n_days = n_distinct(date)使用来计算每个month里有多少unique date
+weather_df %>% 
+  group_by(month) %>% 
+  summarize(
+    n_obs =n(),
+    n_days = n_distinct(date))
+```
+
