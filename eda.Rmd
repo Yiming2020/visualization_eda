@@ -189,3 +189,57 @@ weather_df %>%
   knitr::kable(digits = 1)
 ```
 
+
+`group_by` amd `mutate`
+
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    centered_tmax = tmax - mean_tmax
+  ) %>% 
+  ggplot(aes(x = date, y = centered_tmax, color = name)) +
+  geom_point()
+```
+
+what about window functions
+
+ranking...
+
+```{r}
+#min_rank: a way to define ranks,在这里就是每个地区每个月的tmax排名
+#此时是正序，温度越低rank越小
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(temp_rank = min_rank(tmax))
+
+###此时是降序，温度越低rank越大
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(temp_rank = min_rank(desc(tmax)))
+```
+lag
+
+```{r}
+#lag : find the previous values in a vector, 而且可以限制从第几个开始才lag
+#比如在这里，5代表空开前五个才开始lag，就是说row6 lag_temp显示的是row1 tmax的数据
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(lag_temp = lag(tmax, 5))
+
+#我们可以利用lag得到前后项相减的结果
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(temp_change = tmax - lag(tmax))
+
+#总结每个地区前后两天温差相差最高是多少
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(temp_change = tmax - lag(tmax)) %>% 
+  summarize(
+    temp_change_max = max(temp_change, na.rm = TRUE),
+    temp_change_sd = sd(temp_change, na.rm = TRUE)
+  )
+```
+
