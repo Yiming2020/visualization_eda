@@ -258,6 +258,7 @@ Control your factors.
 #因为r的逻辑是把categorical varianles转换成factor123，然后在作图的时候又识别123分别是什么以categorical name显示
 #所以想改变同一个图的panel顺序，比如把xxx放在第一个，那就是要进行data manipulation，而不是在ggplot进行操作
 #下面这个步骤就是用fct_relevel把waikiki panel提到第一个
+#homework3 prob1跟这个题有点类似，原本图x-axis是根据aisle alpha name排列的， 但是我想让它根据n从小到大排列：aisle = fct_reorder(aisle, n)
 weather_df %>% 
   mutate(
     name = factor(name),
